@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "resources": [
+        {
+            "type": "Microsoft.ApiManagement/service/apis",
+            "apiVersion": "2019-12-01",
+            "name": "mjr-053-apim/mjr-053-rg",
+            "properties": {
+                "displayName": "mjr-053-rg",
+                "apiRevision": "1",
+                "subscriptionRequired": true,
+                "protocols": [
+                    "https"
+                ],
+                "isCurrent": true,
+                "path": "mjr-053-rg"
+            }
+        },
+        {
+            "type": "Microsoft.ApiManagement/service/apis/policies",
+            "apiVersion": "2019-12-01",
+            "name": "mjr-053-apim/mjr-053-rg/policy",
+            "properties": {
+                "value": "<policies>\r\n  <inbound>\r\n    <base />\r\n    <authentication-managed-identity resource=\"https://mjr-053-app-002.azurewebsites.net\" />\r\n    <set-backend-service base-url=\"https://mjr-053-app-002.azurewebsites.net\" />\r\n    </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>",
+                "format": "xml"
+            }
+        },
+        {
+            "type": "Microsoft.ApiManagement/service/apis/operations",
+            "apiVersion": "2019-12-01",
+            "name": "mjr-053-apim/mjr-053-rg/weatherforecast",
+            "properties": {
+                "displayName": "WeatherForecast",
+                "method": "GET",
+                "urlTemplate": "/weatherforecast",
+                "templateParameters": [
+                ],
+                "responses": [
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.ApiManagement/service/apis/operations/policies",
+            "apiVersion": "2019-12-01",
+            "name": "mjr-053-apim/mjr-053-rg/weatherforecast/policy",
+            "properties": {
+                "value": "<policies>\r\n  <inbound>\r\n    <base />\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>",
+                "format": "xml"
+            }
+        }
+    ]
+}
