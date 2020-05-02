@@ -1,35 +1,50 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
+    "parameters": {
+        "ResourcePrefix": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "ApiManagementName": "[concat(parameters('ResourcePrefix'), '-apim')]",
+        "WebAppName": "[concat(parameters('ResourcePrefix'), '-app-002')]"
+    },
     "resources": [
         {
             "type": "Microsoft.ApiManagement/service/apis",
             "apiVersion": "2019-12-01",
-            "name": "mjr-053-apim/mjr-053-rg",
+            "name": "[concat(variables('ApiManagementName'), '/', variables('WebAppName'))]",
             "properties": {
-                "displayName": "mjr-053-rg",
+                "displayName": "[variables('WebAppName')]",
                 "apiRevision": "1",
                 "subscriptionRequired": true,
                 "protocols": [
                     "https"
                 ],
                 "isCurrent": true,
-                "path": "mjr-053-rg"
+                "path": "[variables('WebAppName')]"
             }
         },
         {
             "type": "Microsoft.ApiManagement/service/apis/policies",
             "apiVersion": "2019-12-01",
-            "name": "mjr-053-apim/mjr-053-rg/policy",
+            "name": "[concat(variables('ApiManagementName'), '/', variables('WebAppName'), '/policy')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ApiManagement/service/apis', variables('ApiManagementName'), variables('WebAppName'))]"
+            ],
             "properties": {
-                "value": "<policies>\r\n  <inbound>\r\n    <base />\r\n    <authentication-managed-identity resource=\"https://mjr-053-app-002.azurewebsites.net\" />\r\n    <set-backend-service base-url=\"https://mjr-053-app-002.azurewebsites.net\" />\r\n    </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>",
+                "value": "[concat('<policies>\r\n  <inbound>\r\n    <base />\r\n    <authentication-managed-identity resource=\"https://', variables('WebAppName'),'.azurewebsites.net\" />\r\n    <set-backend-service base-url=\"https://', variables('WebAppName'),'.azurewebsites.net\" />\r\n    </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>')]",
                 "format": "xml"
             }
         },
         {
             "type": "Microsoft.ApiManagement/service/apis/operations",
             "apiVersion": "2019-12-01",
-            "name": "mjr-053-apim/mjr-053-rg/weatherforecast",
+            "name": "[concat(variables('ApiManagementName'), '/', variables('WebAppName'), '/weatherforecast')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ApiManagement/service/apis', variables('ApiManagementName'), variables('WebAppName'))]"
+            ],
             "properties": {
                 "displayName": "WeatherForecast",
                 "method": "GET",
@@ -38,15 +53,6 @@
                 ],
                 "responses": [
                 ]
-            }
-        },
-        {
-            "type": "Microsoft.ApiManagement/service/apis/operations/policies",
-            "apiVersion": "2019-12-01",
-            "name": "mjr-053-apim/mjr-053-rg/weatherforecast/policy",
-            "properties": {
-                "value": "<policies>\r\n  <inbound>\r\n    <base />\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>",
-                "format": "xml"
             }
         }
     ]

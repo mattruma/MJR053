@@ -31,4 +31,4 @@ if ($SkipBuild -eq $false) {
 
 }
 
-New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile ".\WebApplication1ApiManagementConfiguration.json"
+New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile ".\WebApplication1ApiManagementConfiguration.json" -ResourcePrefix $Name
